@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_14_210357) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_14_222542) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -24,13 +24,33 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_14_210357) do
     t.string "name"
     t.decimal "price", precision: 10, scale: 2
     t.integer "stock"
-    t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "category_id", null: false
     t.integer "sales_count", default: 0, null: false
+    t.bigint "user_id"
     t.index ["category_id"], name: "index_products_on_category_id"
     t.index ["user_id"], name: "index_products_on_user_id"
+  end
+
+  create_table "sale_products", force: :cascade do |t|
+    t.bigint "sale_id", null: false
+    t.bigint "product_id", null: false
+    t.integer "quantity", default: 1, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_sale_products_on_product_id"
+    t.index ["sale_id"], name: "index_sale_products_on_sale_id"
+  end
+
+  create_table "sales", force: :cascade do |t|
+    t.decimal "total", precision: 10, scale: 2, null: false
+    t.string "status", null: false
+    t.bigint "client_id", null: false
+    t.integer "qty_products", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["client_id"], name: "index_sales_on_client_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -44,4 +64,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_14_210357) do
 
   add_foreign_key "products", "categories"
   add_foreign_key "products", "users"
+  add_foreign_key "sale_products", "products"
+  add_foreign_key "sale_products", "sales"
+  add_foreign_key "sales", "users", column: "client_id"
 end
