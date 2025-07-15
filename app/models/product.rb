@@ -15,7 +15,7 @@ class Product < ApplicationRecord
   end
 
   def first_sale_product?
-    self.sale_products.count == 1
+    self.sales_count == 0
   end
 
   private

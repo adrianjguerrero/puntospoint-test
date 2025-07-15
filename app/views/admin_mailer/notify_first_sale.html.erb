@@ -1,0 +1,11 @@
+<h1>¡Primer venta del producto!</h1>
+<p>Hola <%= @creator.name %>,</p>
+
+<p>Te informamos que tu producto "<%= @product.name %>" ha sido vendido por primera vez.</p>
+
+<p>Detalles del producto:</p>
+<ul>
+  <li>Nombre: <%= @product.name %></li>
+  <li>Precio: <%= @product.price %></li>
+  <li>Stock restante: <%= @product.stock %></li>
+</ul>

@@ -23,7 +23,12 @@ class SaleController < ApplicationController
         product.save!
 
         if product.first_sale_product?
-          # send mail to creator and other admins
+
+          creator = product.user
+
+          other_admins = User.where(type: "Administrator").where.not(id: creator.id)
+
+          AdminMailer.notify_first_sale(product, creator, other_admins).deliver_now
         end
 
         @sale.sale_products.build(product: product, quantity: item[:quantity].to_i)
@@ -35,7 +40,7 @@ class SaleController < ApplicationController
       @sale.save!
     end
 
-    render json: { message: 'Sale created successfully', sale: @sale }, status: :created
+    render json: { message: "Sale created successfully", sale: @sale }, status: :created
   rescue ActiveRecord::RecordInvalid => e
     render json: { errors: e.record.errors.full_messages }, status: :unprocessable_entity
   end
