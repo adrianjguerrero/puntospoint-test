@@ -3,6 +3,7 @@ class Product < ApplicationRecord
   belongs_to :category
   has_many :sale_products, dependent: :destroy
   has_many :sales, through: :sale_products
+  has_many :images, as: :imageable, dependent: :destroy
 
   validate :user_must_be_administrator
 
