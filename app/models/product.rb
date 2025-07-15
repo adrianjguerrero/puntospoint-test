@@ -14,6 +14,10 @@ class Product < ApplicationRecord
     save
   end
 
+  def first_sale_product?
+    self.sale_products.count == 1
+  end
+
   private
 
   def user_must_be_administrator
