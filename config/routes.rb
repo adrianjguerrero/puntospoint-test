@@ -9,6 +9,9 @@ Rails.application.routes.draw do
     registrations: "users/registrations"
   }
 
+  mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
+
+
   # Ruta protegida para crear una venta
   authenticate :user do
     post "sales", to: "sale#create"
