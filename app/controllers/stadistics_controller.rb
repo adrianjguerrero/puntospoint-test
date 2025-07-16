@@ -6,6 +6,7 @@ class StadisticsController < ApplicationController
     results = Category
     .select("categories.name AS category_name, products.id AS product_id, products.sales_count AS total_quantity")
     .joins(:products)
+    .where("products.sales_count > 0")
     .where(products: { id: Product.select("id")
       .where("category_id = categories.id")
       .order(sales_count: :desc)
