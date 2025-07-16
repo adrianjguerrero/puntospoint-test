@@ -27,19 +27,19 @@ RSpec.describe "Sales API", type: :request do
       post "/login", params: {
         user: {
           email: user.email,
-          password: "password"
+          password: user.password
         }
       }, as: :json
-      response.headers["Authorization"]
+      JSON.parse(response.body)["token"]
+      
     end
 
     it "returns an error for the second request due to insufficient stock" do
       responses = []
-
       threads = []
       2.times do
         threads << Thread.new do
-          post("/sales", params: sale_params, headers: { Authorization: auth_token })
+          post("/sales", params: sale_params, headers: { Authorization: 'Bearer '+auth_token })
           responses << response.dup
         end
       end
@@ -66,7 +66,7 @@ RSpec.describe "Sales API", type: :request do
       threads = []
       2.times do
         threads << Thread.new do
-          post "/sales", params: mail_sale_params, headers: { Authorization: auth_token }
+          post "/sales", params: mail_sale_params, headers: { Authorization: 'Bearer '+auth_token }
         end
       end
 
