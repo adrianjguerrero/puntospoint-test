@@ -1,6 +1,6 @@
 class SaleController < ApplicationController
   skip_before_action :verify_authenticity_token
-  before_action :authenticate_user_or_unauthorized
+  before_action :authorize
 
 
   def create
