@@ -40,7 +40,7 @@ RSpec.describe "Stadistic API", type: :request do
           { product_id: product2.id, quantity: 1 },
         ]
       }
-      
+
       create_sale_request.call(sale_params)
       get "/most_sold_products", headers: { Authorization: "Bearer "+auth_token }
 
@@ -74,17 +74,14 @@ RSpec.describe "Stadistic API", type: :request do
       expect(json_response[category.name][0]).to include("product_id" => product2.id)
       expect(json_response[category.name][1]).to include("product_id" => product1.id)
       expect(json_response[category.name][2]).to include("product_id" => product3.id)
-
-
     end
 
     it "returns sales filtered by category" do
-
       4.times do |i|
         params={ sale: [{ product_id: send("product#{i+1}").id, quantity: i+1 }] }
         create_sale_request.call(params)
       end
-      get "/purchases_by_parameters", headers: { Authorization: "Bearer " + auth_token }, 
+      get "/purchases_by_parameters", headers: { Authorization: "Bearer " + auth_token },
         params: {
           category_id: category_2.id
         }
@@ -94,12 +91,24 @@ RSpec.describe "Stadistic API", type: :request do
       expect(json_response.length).to eq(1)
     end
 
-  
+
     it "returns sales grouped by granularity" do
-      get '/purchases_by_granularity', headers: { Authorization: "Bearer " + auth_token }
+      4.times do |i|
+        params={ sale: [{ product_id: send("product#{i+1}").id, quantity: i+1 }] }
+        create_sale_request.call(params)
+      end
+      get "/purchases_by_granularity", headers: { Authorization: "Bearer " + auth_token },
+        params: {
+          category_id: category.id,
+          granularity: "day"
+        }
+      json_response = JSON.parse(response.body)
+      current_time = Time.now.strftime("%Y-%m-%d")
+
+      # test we get the right format and qty of sales
+      expect(json_response.keys[0]).to eq(current_time)
+      expect(json_response[current_time]).to eq(3)
       expect(response).to be_successful
     end
-
-      
   end
 end
