@@ -76,12 +76,22 @@ RSpec.describe "Stadistic API", type: :request do
       expect(json_response[category.name][2]).to include("product_id" => product3.id)
 
 
-      puts json_response.inspect
     end
 
-    it "returns sales filtered by parameters" do
-      get '/purchases_by_parameters', headers: { Authorization: "Bearer " + auth_token }
-      expect(response).to be_successful
+    it "returns sales filtered by category" do
+
+      4.times do |i|
+        params={ sale: [{ product_id: send("product#{i+1}").id, quantity: i+1 }] }
+        create_sale_request.call(params)
+      end
+      get "/purchases_by_parameters", headers: { Authorization: "Bearer " + auth_token }, 
+        params: {
+          category_id: category_2.id
+        }
+      json_response = JSON.parse(response.body)
+
+      # we only have one product in category_2
+      expect(json_response.length).to eq(1)
     end
 
   
