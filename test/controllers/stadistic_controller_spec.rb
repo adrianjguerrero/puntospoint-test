@@ -13,24 +13,16 @@ RSpec.describe "Stadistic API", type: :request do
       JSON.parse(response.body)["token"]
     end
 
+    let(:create_sale_request) do
+      ->(sale_params) { post "/sales", params: sale_params, headers: { Authorization: "Bearer " + auth_token } }
+    end
+
     let(:category) { Category.create(name: "Most Sold Category") }
     let(:product1) { Product.create(name: "Product 1", stock: 10, price: 250, user: user) }
     let(:product2) { Product.create(name: "Product 2", stock: 5, price: 100, user: user) }
     let(:product3) { Product.create(name: "Product 3", stock: 8, price: 50, user: user) }
-    let(:product4) { Product.create(name: "Product 4", stock: 15, price: 300, user: user) }
-    let(:product5) { Product.create(name: "Product 5", stock: 20, price: 150, user: user) }
+    let(:product4) { Product.create(name: "Product 4", stock: 15, price: 25, user: user) }
     let(:category_2) { Category.create(name: "Category 2") }
-    let(:sale_request) do
-      post "/sales", params: 
-      {
-        sale: [
-          { product_id: product1.id, quantity: 5 },
-          { product_id: product2.id, quantity: 2 },
-          { product_id: product3.id, quantity: 3 },
-          { product_id: product5.id, quantity: 1 }
-        ]
-      }, headers: { Authorization: "Bearer " + auth_token }
-    end
     before do
       product1.categories << category
       product2.categories << category
@@ -41,7 +33,15 @@ RSpec.describe "Stadistic API", type: :request do
 
 
     it "returns the most purchased products by category" do
-      sale_request
+      sale_params ={
+        sale: [
+          { product_id: product1.id, quantity: 5 },
+          { product_id: product3.id, quantity: 2 },
+          { product_id: product2.id, quantity: 1 },
+        ]
+      }
+      
+      create_sale_request.call(sale_params)
       get "/most_sold_products", headers: { Authorization: "Bearer "+auth_token }
 
       json_response = JSON.parse(response.body)
@@ -54,7 +54,15 @@ RSpec.describe "Stadistic API", type: :request do
     end
 
     it "returns the top revenue products" do
-      sale_request
+      sale_params ={
+        sale: [
+          { product_id: product2.id, quantity: 5 },
+          { product_id: product1.id, quantity: 1 },
+          { product_id: product3.id, quantity: 2 },
+          { product_id: product4.id, quantity: 3 },
+        ]
+      }
+      create_sale_request.call(sale_params)
 
       get "/top_revenue_products", headers: { Authorization: "Bearer " + auth_token }
       json_response = JSON.parse(response.body)
@@ -63,8 +71,8 @@ RSpec.describe "Stadistic API", type: :request do
 
       expect(json_response[category.name].length).to eq(3)
 
-      expect(json_response[category.name][0]).to include("product_id" => product1.id)
-      expect(json_response[category.name][1]).to include("product_id" => product2.id)
+      expect(json_response[category.name][0]).to include("product_id" => product2.id)
+      expect(json_response[category.name][1]).to include("product_id" => product1.id)
       expect(json_response[category.name][2]).to include("product_id" => product3.id)
 
 
