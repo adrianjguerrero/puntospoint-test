@@ -5,7 +5,7 @@ class SaleController < ApplicationController
 
   def create
     cart = sale_params
-    client_id = current_user.id 
+    client_id = @current_user.id 
     if cart.blank? || !cart.is_a?(Array)
       render json: { error: 'Invalid cart data' }, status: :unprocessable_entity and return
     end
