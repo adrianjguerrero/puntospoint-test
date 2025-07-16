@@ -1,5 +1,6 @@
 class StadisticsController < ApplicationController
   before_action :authorize
+  before_action :authenticate_admin!
 
   def most_purchased_products_by_category
     results = Category
@@ -88,12 +89,11 @@ class StadisticsController < ApplicationController
     
   end
 
-  # def authenticate_admin!
-  #   # binding.pry
-  #   unless current_user.is_a?(Administrator)
-  #     render json: { error: "Unauthorized" }, status: :unauthorized
-  #   end
-  # end
+  def authenticate_admin!
+    unless @current_user.is_a?(Administrator)
+      render json: { error: "Only admin can use this" }, status: :unauthorized
+    end
+  end
 
   # faltarian los test
 end
