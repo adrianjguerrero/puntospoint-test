@@ -36,6 +36,16 @@ class StadisticsController < ApplicationController
     .limit(3)
     .group_by(&:category_name)
 
+    results = results.transform_values do |products|
+      products.map do |product|
+        {
+          product_id: product.id,
+          product_name: product.name,
+          total_revenue: product.total_revenue
+        }
+      end
+    end
+
     render json: results
   end
 
