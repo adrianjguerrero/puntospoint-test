@@ -51,6 +51,11 @@ class StadisticsController < ApplicationController
 
 
   def purchases_by_parameters
+
+    if good_time_format? == false
+      return render json: { error: "Invalid date format" }, status: :unprocessable_entity
+    end
+
     result_sales = get_sales_by_parameters(params)
 
     render json: result_sales
@@ -58,6 +63,11 @@ class StadisticsController < ApplicationController
 
 
   def purchases_by_granularity
+
+    if good_time_format? == false
+      return render json: { error: "Invalid date format" }, status: :unprocessable_entity
+    end
+
     granularity = params[:granularity]
     formats = {
       "hour" => "DATE_TRUNC('hour', sales.created_at)",
@@ -98,6 +108,26 @@ class StadisticsController < ApplicationController
     result_sales = result_sales.where(products: { user_id: params[:admin_id] }) if params[:admin_id].present?
     result_sales.distinct
     
+  end
+
+  def good_time_format?
+    correct_time = true
+    correct_time = time_is_correctly_formatted?(params[:start_date]) if params[:start_date].present?
+    correct_time = time_is_correctly_formatted?(params[:end_date]) if params[:end_date].present? && correct_time != false
+    correct_time
+  end
+
+  def time_is_correctly_formatted?(time_string)
+    return true if time_string.blank?
+    return false if time_string.is_a?(String) == false
+    begin
+      time_string.to_time
+      true
+    rescue ArgumentError
+      false
+    rescue NoMethodError
+      false
+    end
   end
 
   def authenticate_admin!
