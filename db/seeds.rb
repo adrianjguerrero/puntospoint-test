@@ -68,20 +68,32 @@ CategoriesProduct.create([
 ])
 
 # Crear ventas
-sales = Sale.create([
-  { total: 320.00, status: 'completed', client_id: clients[0].id, qty_products: 2, created_at: 1.day.ago },
-  { total: 15.00, status: 'completed', client_id: clients[1].id, qty_products: 1, created_at: 1.day.ago },
-  { total: 800.00, status: 'completed', client_id: clients[0].id, qty_products: 1, created_at: 1.day.ago },
-])
-
-# Crear productos de venta
+first_sale = Sale.create( { total: 320.00, status: 'completed', client_id: clients[0].id, qty_products: 2, created_at: 1.day.ago.beginning_of_day } )
 SaleProduct.create([
-  { sale_id: sales[0].id, product_id: products[0].id, quantity: 1, created_at: 1.day.ago },
-  { sale_id: sales[0].id, product_id: products[1].id, quantity: 1, created_at: 1.day.ago },
-  { sale_id: sales[1].id, product_id: products[5].id, quantity: 1, created_at: 1.day.ago },
-  { sale_id: sales[2].id, product_id: products[2].id, quantity: 1, created_at: 1.day.ago },
+  { sale_id: first_sale.id, product_id: products[0].id, quantity: 1, created_at: 1.day.ago.beginning_of_day },
+  { sale_id: first_sale.id, product_id: products[1].id, quantity: 1, created_at: 1.day.ago.beginning_of_day }
 ])
 
+second_sale = Sale.create( { total: 15.00, status: 'completed', client_id: clients[1].id, qty_products: 1, created_at: 1.day.ago.beginning_of_day } )
+SaleProduct.create([
+  { sale_id: second_sale.id, product_id: products[5].id, quantity: 1, created_at: 1.day.ago.beginning_of_day }
+])
+
+
+third_sale = Sale.create( { total: 800.00, status: 'completed', client_id: clients[0].id, qty_products: 1, created_at: 1.day.ago.beginning_of_day } )
+SaleProduct.create([
+  { sale_id: third_sale.id, product_id: products[2].id, quantity: 1, created_at: 1.day.ago.beginning_of_day }
+])  
+
+fourth_sale = Sale.create(
+  { total: 10.00, status: 'completed', client_id: clients[1].id, qty_products: 2, created_at: Time.now.end_of_day } )
+SaleProduct.create( { sale_id: fourth_sale.id, product_id: products[3].id, quantity: 2, created_at: Time.now.end_of_day } )
+
+fifth_sale = Sale.create( { total: 505.00, status: 'completed', client_id: clients[0].id, qty_products: 2, created_at: Time.now.end_of_day } )
+SaleProduct.create([
+  { sale_id: fifth_sale.id, product_id: products[4].id, quantity: 1, created_at: Time.now.end_of_day },
+  { sale_id: fifth_sale.id, product_id: products[3].id, quantity: 1, created_at: Time.now.end_of_day }
+])
 
 
 
