@@ -18,13 +18,13 @@ Image.destroy_all
 CategoriesProduct.destroy_all
 
 clients = Client.create([
-  { name: 'Juan Pérez', email: 'juan@example.com', password_digest: 'password'},
-  { name: 'María Gómez', email: 'maria@example.com', password_digest: 'password' }
+  { name: 'Juan Pérez', email: 'juan@example.com', password_digest: BCrypt::Password.create('password') },
+  { name: 'María Gómez', email: 'maria@example.com', password_digest: BCrypt::Password.create('password') }
 ])
 
 administrator = Administrator.create([
-  { name: 'Carlos López', email: 'carlos@puntospoint.com', password_digest: 'password'},
-  { name: 'Adrian Guerrero', email: 'aguerrero@puntospoint.com', password_digest: 'password'}
+  { name: 'Carlos López', email: 'carlos@puntospoint.com', password_digest: BCrypt::Password.create('password')},
+  { name: 'Adrian Guerrero', email: 'aguerrero@puntospoint.com', password_digest: BCrypt::Password.create('password')}
 ])
 
 categories = Category.create([

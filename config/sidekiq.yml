@@ -9,7 +9,7 @@
   - active_storage_purge
 tasks: &tasks
   DailyPurchaseReportJob:
-    cron: "* * 1 * * " # every day at 03:00
+    cron: "0 0 * * *"
     queue: default
     description: "Generates daily purchase reports"
 :scheduler:
