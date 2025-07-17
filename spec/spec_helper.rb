@@ -92,12 +92,4 @@ RSpec.configure do |config|
   Kernel.srand config.seed
 =end
 
-  # def user_login(user)
-      
-  #   secret = ENV['DEVISE_JWT_SECRET_KEY']
-  
-    
-  #   JWT.encode({ user_id: user.id }, ENV['DEVISE_JWT_SECRET_KEY'])
-  #   request.headers["Authorization"] = 
-  # end
 end
