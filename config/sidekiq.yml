@@ -1,0 +1,17 @@
+:concurrency: 3
+:timeout: 60
+:verbose: true
+:queues:
+  - critical
+  - default
+  - mailers
+  - active_storage_analysis
+  - active_storage_purge
+tasks: &tasks
+  DailyPurchaseReportJob:
+    cron: "* * 1 * * " # every day at 03:00
+    queue: default
+    description: "Generates daily purchase reports"
+:scheduler:
+  :schedule:
+    <<: *tasks
