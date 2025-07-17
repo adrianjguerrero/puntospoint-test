@@ -3,17 +3,24 @@ class StadisticsController < ApplicationController
   before_action :authenticate_admin!
 
   def most_purchased_products_by_category
+    cache_key = "most_purchased_products_by_category"
+    results = $redis.get(cache_key)
+    results = nil if Rails.env.test?
+  
+    return render json: JSON.parse(results) if results
+      
+  
     results = Category
-    .select("categories.name AS category_name, products.id AS product_id, products.sales_count AS total_quantity")
-    .joins(:products)
-    .where("products.sales_count > 0")
-    .where(products: { id: Product.select("id")
-      .where("category_id = categories.id")
-      .order(sales_count: :desc)
-      .limit(5)
-    })
-    .order("categories.name, products.sales_count DESC")
-    .group_by(&:category_name)
+      .select("categories.name AS category_name, products.id AS product_id, products.sales_count AS total_quantity")
+      .joins(:products)
+      .where("products.sales_count > 0")
+      .where(products: { id: Product.select("id")
+        .where("category_id = categories.id")
+        .order(sales_count: :desc)
+        .limit(5)
+      })
+      .order("categories.name, products.sales_count DESC")
+      .group_by(&:category_name)
 
     results = results.transform_values do |products|
       products.map do |product|
@@ -23,10 +30,17 @@ class StadisticsController < ApplicationController
         }
       end
     end
+
+    $redis.set(cache_key, results.to_json, ex: 1.hour.to_i)
     render json: results
   end
 
   def top_revenue_products
+    cache_key = "top_revenue_products"
+    results = $redis.get(cache_key)
+    results = nil if Rails.env.test?
+  
+    return render json: JSON.parse(results) if results
 
     results = Product.joins(sale_products: :sale)
     .select("products.id, products.name, categories.name AS category_name, SUM(sale_products.quantity * products.price) AS total_revenue")
@@ -46,11 +60,18 @@ class StadisticsController < ApplicationController
       end
     end
 
+    $redis.set(cache_key, results.to_json, ex: 1.hour.to_i)
     render json: results
   end
 
 
   def purchases_by_parameters
+
+    key_cache = key_cache_constructor(params)
+    results = $redis.get(key_cache)
+    results = nil if Rails.env.test?
+    
+    return render json: JSON.parse(results) if results
 
     if good_time_format? == false
       return render json: { error: "Invalid date format" }, status: :unprocessable_entity
@@ -58,11 +79,20 @@ class StadisticsController < ApplicationController
 
     result_sales = get_sales_by_parameters(params)
 
+    $redis.set(key_cache, result_sales.to_json, ex: 1.hour.to_i)
+
     render json: result_sales
   end
 
 
   def purchases_by_granularity
+
+    key_cache = key_cache_constructor(params)
+    results = $redis.get(key_cache)
+    
+    results = nil if Rails.env.test?
+    return render json: JSON.parse(results) if results
+
 
     if good_time_format? == false
       return render json: { error: "Invalid date format" }, status: :unprocessable_entity
@@ -94,12 +124,24 @@ class StadisticsController < ApplicationController
       }
     end
 
+    $redis.set(key_cache_constructor(params), result_sales.to_json, ex: 1.hour.to_i)
     render json: result_sales.reduce(&:merge)
   end
 
   private
 
-  
+  def key_cache_constructor(params)
+    key_cache = ''
+    key_cache += "start_date=#{params[:start_date]}::" if params[:start_date].present?
+    key_cache += "end_date=#{params[:end_date]}::" if params[:end_date].present?
+    key_cache += "category_id=#{params[:category_id]}::" if params[:category_id].present?
+    key_cache += "client_id=#{params[:client_id]}::" if params[:client_id].present?
+    key_cache += "admin_id=#{params[:admin_id]}::" if params[:admin_id].present?
+    key_cache += "granularity=#{params[:granularity]}::" if params[:granularity].present?
+    key_cache
+  end
+
+
   def get_sales_by_parameters(params)
     result_sales = Sale.joins(:sale_products, :products)
     result_sales = result_sales.where(:created_at => params[:start_date].to_time..(params[:end_date].to_time)) if params[:start_date].present? && params[:end_date].present?
@@ -136,5 +178,4 @@ class StadisticsController < ApplicationController
     end
   end
 
-  # faltarian los test
 end
