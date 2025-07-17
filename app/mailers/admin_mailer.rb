@@ -11,4 +11,9 @@ class AdminMailer < ApplicationMailer
       subject: "Primer venta del producto: #{@product.name}"
     )
   end
+
+  def send_report(csv_data, admins)
+    attachments["daily_purchase_report.csv"] = csv_data
+    mail(to: admins.map(&:email), subject: "Informe Diario de Compras")
+  end
 end
