@@ -31,7 +31,7 @@ class StadisticsController < ApplicationController
       end
     end
 
-    $redis.set(cache_key, results.to_json, ex: 1.hour.to_i)
+    $redis.set(cache_key, results.to_json, ex: 1.hour.to_i) if Rails.env != 'test'
     render json: results
   end
 
@@ -60,7 +60,7 @@ class StadisticsController < ApplicationController
       end
     end
 
-    $redis.set(cache_key, results.to_json, ex: 1.hour.to_i)
+    $redis.set(cache_key, results.to_json, ex: 1.hour.to_i) if Rails.env != 'test'
     render json: results
   end
 
@@ -79,7 +79,7 @@ class StadisticsController < ApplicationController
 
     result_sales = get_sales_by_parameters(params)
 
-    $redis.set(key_cache, result_sales.to_json, ex: 1.hour.to_i)
+    $redis.set(key_cache, result_sales.to_json, ex: 1.hour.to_i) if Rails.env != 'test'
 
     render json: result_sales
   end
@@ -124,7 +124,7 @@ class StadisticsController < ApplicationController
       }
     end
 
-    $redis.set(key_cache_constructor(params), result_sales.to_json, ex: 1.hour.to_i)
+    $redis.set(key_cache_constructor(params), result_sales.to_json, ex: 1.hour.to_i) if Rails.env != 'test'
     render json: result_sales.reduce(&:merge)
   end
 
