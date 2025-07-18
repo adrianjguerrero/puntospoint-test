@@ -31,16 +31,14 @@ class ApplicationController < ActionController::Base
   def authorize
       render json: { message: 'You have to log in.' }, status: :unauthorized unless authorized_user
   end
+
+  def authenticate_admin!
+    unless @current_user.is_a?(Administrator)
+      render json: { error: "Only admin can use this" }, status: :unauthorized
+    end
+  end
   protected
-
-  # def authenticate_user_or_unauthorized
-  #   unless current_user
-  #     render json: { error: 'Unauthorized' }, status: :unauthorized
-  #   end
-  # end
-
-  # def configure_permitted_parameters
-  #   # devise_parameter_sanitizer.permit(:sign_up, keys: %i[name])
-  #   # devise_parameter_sanitizer.permit(:account_update, keys: %i[name])
-  # end
+  def current_administrator
+    @current_user if @current_user.is_a?(Administrator)
+  end
 end
