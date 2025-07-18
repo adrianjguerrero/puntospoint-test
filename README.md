@@ -49,4 +49,11 @@ rspec test/controllers/sale_controller_spec.rb
 rspec test/controllers/stadistic_controller_spec.rb
 ```
 ### Documentación
-puees ir a http://localhost:3000/api-docs/index.html para ver la documentación de swagger
+puees ir a la documentación de [swagger](http://localhost:3000/api-docs/index.html) para ver de forma interactiva los endpoints
+
+tambien aqui puedes ver un [diagrama](https://dbdiagram.io/d/68799971f413ba350875c58a)
+
+Imagen:
+
+![Diagrama de la base de datos](docs/diagram.png)
+
