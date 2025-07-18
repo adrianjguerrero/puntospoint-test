@@ -120,7 +120,7 @@
 				"auth": {
 					"type": "bearer",
 					"bearer": {
-						"token": "{{vault:authorization-secret}}"
+						"token": "{{token}}"
 					}
 				},
 				"method": "POST",
