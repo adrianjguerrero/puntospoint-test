@@ -127,7 +127,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"sale\": [\n    { \"product_id\": 9, \"quantity\": 1}\n  ]\n}",
+					"raw": "{\n  \"sale\": [\n    { \"product_id\": 14, \"quantity\": 1}\n  ]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -135,6 +135,132 @@
 					}
 				},
 				"url": "http://localhost:3000/sales"
+			},
+			"response": []
+		},
+		{
+			"name": "Create Product",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{token}}"
+					}
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"product\":{\n        \"name\":\"a\",\n        \"price\":1,\n        \"stock\":2,\n        \"category_id\":10\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:3000/products"
+			},
+			"response": []
+		},
+		{
+			"name": "Update product",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{token}}"
+					}
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"product\":{\n        \"name\":\"c\",\n        \"price\":1,\n        \"stock\":2,\n        \"category_id\":10\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:3000/products/19"
+			},
+			"response": []
+		},
+		{
+			"name": "delete product",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{token}}"
+					}
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:3000/products/19"
+			},
+			"response": []
+		},
+		{
+			"name": "see product",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{token}}"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:3000/products/19"
+			},
+			"response": []
+		},
+		{
+			"name": "all products",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{token}}"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:3000/products/"
 			},
 			"response": []
 		},
@@ -208,7 +334,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n   \"start_date\": \"2025-07-16\",\n    \"end_date\":\"2025-07-15\"\n}",
+					"raw": "{\n    \"end_date\":\"2025-12-31\"\n\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -235,7 +361,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n   \"start_date\": \"2025-07-14 15:53:20.00000000\",\n    \"end_date\":\"2025-07-15 20:00:00.000000000\",\n    \"granularity\": \"hour\"\n}",
+					"raw": "{\n   \"start_date\": \"2025-01-01\",\n    \"end_date\":\"2025-12-31\",\n    \"granularity\": \"week\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
