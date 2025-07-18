@@ -49,12 +49,12 @@ products = Product.create([
 
 # Crear imágenes
 images = Image.create([
-  { url: 'http://example.com/images/smartphone.jpg', imageable_type: 'Product', imageable_id: products[0].id },
-  { url: 'http://example.com/images/camiseta.jpg', imageable_type: 'Product', imageable_id: products[1].id },
-  { url: 'http://example.com/images/laptop.jpg', imageable_type: 'Product', imageable_id: products[2].id },
-  { url: 'http://example.com/images/cereal.jpg', imageable_type: 'Product', imageable_id: products[3].id },
-  { url: 'http://example.com/images/sofa.jpg', imageable_type: 'Product', imageable_id: products[4].id },
-  { url: 'http://example.com/images/muneca.jpg', imageable_type: 'Product', imageable_id: products[5].id }
+  { url: 'https://http2.mlstatic.com/D_NQ_NP_670821-MLV72243426034_102023-O.webp', imageable_type: 'Product', imageable_id: products[0].id },
+  { url: 'https://http2.mlstatic.com/D_NQ_NP_978547-MLV54194488098_032023-O.webp', imageable_type: 'Product', imageable_id: products[1].id },
+  { url: 'https://http2.mlstatic.com/D_NQ_NP_719266-MLV72145181300_102023-O.webp', imageable_type: 'Product', imageable_id: products[2].id },
+  { url: 'https://http2.mlstatic.com/D_NQ_NP_837489-MLV83703726274_042025-O.webp', imageable_type: 'Product', imageable_id: products[3].id },
+  { url: 'https://http2.mlstatic.com/D_NQ_NP_776309-MLV54940623985_042023-O.webp', imageable_type: 'Product', imageable_id: products[4].id },
+  { url: 'https://http2.mlstatic.com/D_NQ_NP_831162-MLV82795100320_032025-O.webp', imageable_type: 'Product', imageable_id: products[5].id }
 ])
 
 # Crear relaciones entre categorías y productos
