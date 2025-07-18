@@ -1,0 +1,319 @@
+openapi: 3.0.0
+info:
+  title: API de PuntosPoint
+  description: API para la prueba de PuntosPoint
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000
+    description: Servidor local
+paths:
+  /register:
+    post:
+      summary: Iniciar sesión
+      description: Inicia sesión
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: object
+                  properties:
+                    email:
+                      type: string
+                    name:
+                      type: string
+                    password:
+                      type: string
+      responses:
+        '201':
+          description: Inición iniciada exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                  token:
+                    type: string
+        '422':
+          description: Fallo en el inicio de sesión
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  /login:
+    post:
+      summary: Iniciar sesión
+      description: Inicia sesión con un usuario existente
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: object
+                  properties:
+                    email:
+                      type: string
+                    password:
+                      type: string
+      responses:
+        '200':
+          description: Inicio de sesión exitoso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: '#/components/schemas/User'
+                  token:
+                    type: string
+        '401':
+          description: Correo o contraseña inválidos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
+  /sales:
+    post:
+      summary: Crear una nueva venta
+      description: Crea una nueva venta con los productos especificados
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/schemas/Sale'
+      responses:
+        '201':
+          description: Venta creada exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  sale:
+                    type: object
+        '422':
+          description: Entidad no procesable
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+  /most_sold_products:
+    get:
+      summary: Productos más comprados por categoría
+      description: Obtiene los productos más comprados por categoría
+      responses:
+        '200':
+          description: Lista de productos más comprados por categoría
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Product'
+
+  /top_revenue_products:
+    get:
+      summary: Productos con mayores ingresos
+      description: Obtiene los productos que generan mayores ingresos
+      responses:
+        '200':
+          description: Lista de productos con mayores ingresos
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: array
+                  items:
+                    $ref: '#components/schemas/Product'
+  /purchases_by_parameters:
+    get:
+      summary: Compras por parámetros
+      description: Obtiene compras filtradas por parámetros
+      parameters:
+        - name: start_date
+          in: query
+          schema:
+            type: string
+        - name: end_date
+          in: query
+          schema:
+            type: string
+        - name: category_id
+          in: query
+          schema:
+            type: integer
+        - name: client_id
+          in: query
+          schema:
+            type: integer
+        - name: admin_id
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lista de compras filtradas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#components/schemas/Sale'
+        '422':
+          description: Formato de fecha inválido
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+  /purchases_by_granularity:
+    get:
+      summary: Compras por granularidad
+      description: Obtiene compras agrupadas por granularidad de tiempo
+      parameters:
+        - name: start_date
+          in: query
+          schema:
+            type: string
+        - name: end_date
+          in: query
+          schema:
+            type: string
+        - name: category_id
+          in: query
+          schema:
+            type: integer
+        - name: client_id
+          in: query
+          schema:
+            type: integer
+        - name: admin_id
+          in: query
+          schema:
+            type: integer
+        - name: granularity
+          in: query
+          schema:
+            type: string
+            enum: [hour, day, week, year]
+      responses:
+        '200':
+          description: Compras agrupadas por granularidad de tiempo
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+        '422':
+          description: Formato de fecha inválido o granularidad inválida
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+components:
+  schemas:
+    Sale:
+      type: object
+      properties:
+        id:
+          type: integer
+        client_id:
+          type: integer
+        total:
+          type: number
+        qty_products:
+          type: integer
+        status:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        price:
+          type: number
+        stock:
+          type: integer
+        sales_count:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    Category:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - BearerAuth: []
