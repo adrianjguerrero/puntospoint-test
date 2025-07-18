@@ -44,7 +44,8 @@ products = Product.create([
   { name: 'Laptop', price: 800.00, stock: 30, user_id: Administrator.last.id, sales_count: 0 },
   { name: 'Cereal', price: 5.00, stock: 200, user_id: Administrator.last.id, sales_count: 0 },
   { name: 'Sofá', price: 500.00, stock: 10, user_id: Administrator.last.id, sales_count: 0 },
-  { name: 'Muñeca', price: 15.00, stock: 150, user_id: Administrator.last.id, sales_count: 0 }
+  { name: 'Muñeca', price: 15.00, stock: 150, user_id: Administrator.last.id, sales_count: 0 },
+  { name: 'Tablet', price: 250.00, stock: 40, user_id: Administrator.last.id, sales_count: 0 },
 ])
 
 # Crear imágenes
