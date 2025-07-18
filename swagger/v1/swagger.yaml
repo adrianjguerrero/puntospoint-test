@@ -9,8 +9,8 @@ servers:
 paths:
   /register:
     post:
-      summary: Iniciar sesión
-      description: Inicia sesión
+      summary: Registrar un nuevo usuario
+      description: Para registrar un nuevo usuario
       requestBody:
         required: true
         content:
@@ -29,18 +29,18 @@ paths:
                       type: string
       responses:
         '201':
-          description: Inición iniciada exitosamente
+          description: Si el registro es exitoso
           content:
             application/json:
               schema:
                 type: object
                 properties:
                   user:
-                    type: object
+                    $ref: '#/components/schemas/User'
                   token:
                     type: string
         '422':
-          description: Fallo en el inicio de sesión
+          description: Fallo al registrar el usuario
           content:
             application/json:
               schema:
@@ -97,19 +97,24 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#components/schemas/Sale'
+              type: object
+              properties:
+                  sale:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        product_id:
+                          type: integer
+                        quantity:
+                          type: integer
       responses:
         '201':
           description: Venta creada exitosamente
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                  sale:
-                    type: object
+                $ref: '#components/schemas/Sale'
         '422':
           description: Entidad no procesable
           content:
