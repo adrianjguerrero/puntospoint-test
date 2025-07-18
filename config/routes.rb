@@ -15,4 +15,10 @@ Rails.application.routes.draw do
   get "purchases_by_parameters", to: "stadistics#purchases_by_parameters"
   get "purchases_by_granularity", to: "stadistics#purchases_by_granularity"
 
+  post "products", to: "products#create"
+  put "products/:id", to: "products#update"
+  delete "products/:id", to: "products#destroy"
+  get "products", to: "products#index"
+  get "products/:id", to: "products#show"
+
 end
