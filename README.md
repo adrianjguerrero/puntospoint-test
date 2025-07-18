@@ -51,7 +51,7 @@ rspec test/controllers/stadistic_controller_spec.rb
 ### Documentación
 puedes ir a la documentación de [swagger](http://localhost:3000/api-docs/index.html) para ver de forma interactiva los endpoints
 
-tambien aqui puedes ver un [diagrama](https://dbdiagram.io/d/68799971f413ba350875c58a)
+tambien aqui puedes ver un [diagrama](https://dbdiagram.io/d/PuntosPoint-diagrama-68799971f413ba350875c58a)
 
 Imagen:
 
