@@ -172,10 +172,5 @@ class StadisticsController < ApplicationController
     end
   end
 
-  def authenticate_admin!
-    unless @current_user.is_a?(Administrator)
-      render json: { error: "Only admin can use this" }, status: :unauthorized
-    end
-  end
 
 end
