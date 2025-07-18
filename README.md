@@ -43,6 +43,12 @@ rails db:seed
 rails s
 ```
 
+### 6. Sidekiq
+el proyecto cuenta con un job para generar reportes, utiliza sidekiq, en otra consola ejecuta
+```bash
+sidekiq
+```
+
 ### Algunas pruebas disponibles
 ```bash
 rspec test/controllers/sale_controller_spec.rb
