@@ -148,7 +148,7 @@ class StadisticsController < ApplicationController
       result_sales = result_sales.where(:created_at => params[:start_date].to_time..(params[:end_date].to_time))
     else
       time_to_use = params[:start_date]&.to_time || params[:end_date]&.to_time
-      result_sales = result_sales.where(:created_at => time_to_use)
+      result_sales = result_sales.where(:created_at => time_to_use) if !time_to_use.nil?
     end
     result_sales = result_sales.joins(sale_products: { product: :categories }).where(categories: { id: params[:category_id] }) if params[:category_id].present?
     result_sales = result_sales.where(client_id: params[:client_id]) if params[:client_id].present?
