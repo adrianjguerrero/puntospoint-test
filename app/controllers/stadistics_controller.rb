@@ -144,7 +144,12 @@ class StadisticsController < ApplicationController
 
   def get_sales_by_parameters(params)
     result_sales = Sale.joins(:sale_products, :products)
-    result_sales = result_sales.where(:created_at => params[:start_date].to_time..(params[:end_date].to_time)) if params[:start_date].present? && params[:end_date].present?
+    if params[:start_date].present? && params[:end_date].present?
+      result_sales = result_sales.where(:created_at => params[:start_date].to_time..(params[:end_date].to_time))
+    else
+      time_to_use = params[:start_date]&.to_time || params[:end_date]&.to_time
+      result_sales = result_sales.where(:created_at => time_to_use)
+    end
     result_sales = result_sales.joins(sale_products: { product: :categories }).where(categories: { id: params[:category_id] }) if params[:category_id].present?
     result_sales = result_sales.where(client_id: params[:client_id]) if params[:client_id].present?
     result_sales = result_sales.where(products: { user_id: params[:admin_id] }) if params[:admin_id].present?
