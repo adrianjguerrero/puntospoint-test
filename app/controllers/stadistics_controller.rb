@@ -5,8 +5,7 @@ class StadisticsController < ApplicationController
   def most_purchased_products_by_category
     cache_key = "most_purchased_products_by_category"
     results = $redis.get(cache_key)
-    results = nil if Rails.env.test?
-  
+    results = nil if Rails.env.test? || ENV['SKIP_REDIS'] == 'true'
     return render json: JSON.parse(results) if results
       
   
@@ -38,8 +37,7 @@ class StadisticsController < ApplicationController
   def top_revenue_products
     cache_key = "top_revenue_products"
     results = $redis.get(cache_key)
-    results = nil if Rails.env.test?
-  
+    results = nil if Rails.env.test? || ENV['SKIP_REDIS'] == 'true'
     return render json: JSON.parse(results) if results
 
     results = Product.joins(sale_products: :sale)
@@ -69,7 +67,7 @@ class StadisticsController < ApplicationController
 
     key_cache = key_cache_constructor(params)
     results = $redis.get(key_cache)
-    results = nil if Rails.env.test?
+    results = nil if Rails.env.test? || ENV['SKIP_REDIS'] == 'true'
     
     return render json: JSON.parse(results) if results
 
@@ -90,7 +88,8 @@ class StadisticsController < ApplicationController
     key_cache = key_cache_constructor(params)
     results = $redis.get(key_cache)
     
-    results = nil if Rails.env.test?
+    results = nil if Rails.env.test? || ENV['SKIP_REDIS'] == 'true'
+
     return render json: JSON.parse(results) if results
 
 
