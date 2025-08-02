@@ -22,13 +22,16 @@ class SaleController < ApplicationController
         product.stock -= item[:quantity].to_i
         product.save!
 
-        if product.first_sale_product?
+        product.with_lock do 
 
-          creator = product.user
+          if product.first_sale_product?
 
-          other_admins = User.where(type: "Administrator").where.not(id: creator.id)
+            creator = product.user
 
-          AdminMailer.notify_first_sale(product, creator, other_admins).deliver_now
+            other_admins = User.where(type: "Administrator").where.not(id: creator.id)
+
+            AdminMailer.notify_first_sale(product, creator, other_admins).deliver_now
+          end
         end
 
         @sale.sale_products.build(product: product, quantity: item[:quantity].to_i)
