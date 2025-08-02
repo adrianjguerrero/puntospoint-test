@@ -18,16 +18,17 @@ class StadisticsController < ApplicationController
         .order(sales_count: :desc)
         .limit(5)
       })
+      .group("category_name, products.id")
       .order("categories.name, products.sales_count DESC")
-      .group_by(&:category_name)
 
-    results = results.transform_values do |products|
-      products.map do |product|
-        {
-          product_id: product.product_id,
-          total_quantity: product.total_quantity
-        }
-      end
+
+    results = results.each_with_object({}) do |result, hash|
+      category_name = result.category_name
+      hash[category_name] ||= [] 
+      hash[category_name] << {
+        product_id: result.product_id,
+        total_quantity: result.total_quantity
+      }
     end
 
     $redis.set(cache_key, results.to_json, ex: 1.hour.to_i) if Rails.env != 'test'
@@ -46,16 +47,17 @@ class StadisticsController < ApplicationController
     .group("products.id, categories.name")
     .order("total_revenue DESC")
     .limit(3)
-    .group_by(&:category_name)
+    .group("category_name")
 
-    results = results.transform_values do |products|
-      products.map do |product|
-        {
-          product_id: product.id,
-          product_name: product.name,
-          total_revenue: product.total_revenue
-        }
-      end
+    results = results.each_with_object({}) do |result, hash|
+      category_name = result.category_name
+      hash[category_name] ||= []
+    
+      hash[category_name] << {
+        product_id: result.id,
+        product_name: result.name,
+        total_revenue: result.total_revenue
+      }
     end
 
     $redis.set(cache_key, results.to_json, ex: 1.hour.to_i) if Rails.env != 'test'

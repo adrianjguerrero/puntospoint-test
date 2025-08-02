@@ -103,7 +103,7 @@ RSpec.describe "Stadistic API", type: :request do
           granularity: "day"
         }
       json_response = JSON.parse(response.body)
-      current_time = Time.now.strftime("%Y-%m-%d")
+      current_time = Time.now.utc.strftime("%Y-%m-%d")
 
       # test we get the right format and qty of sales
       expect(json_response.keys[0]).to eq(current_time)
