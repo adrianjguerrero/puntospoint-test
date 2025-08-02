@@ -22,7 +22,7 @@ class SaleController < ApplicationController
         product.stock -= item[:quantity].to_i
         product.save!
 
-        product.with_lock do 
+        product.with_lock do
 
           if product.first_sale_product?
 
