@@ -6,7 +6,8 @@ class ProductsController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   def index
-    @products = Product.all
+    params[:page] = Integer(params[:page]) rescue 1
+    @products = Product.paginate(page: params[:page], per_page: 2)
     render json: @products
   end
 
